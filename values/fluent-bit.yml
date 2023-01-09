@@ -1,0 +1,11 @@
+config:
+  outputs: |
+    [OUTPUT]
+        Name  opensearch
+        Match kube.*
+        Host  opensearch-cluster-master.opensearch
+        Port  9200
+        Index my_index
+        Type  my_type
+        tls   Off
+        Suppress_Type_Name On

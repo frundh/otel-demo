@@ -1,0 +1,10 @@
+opensearchHosts: "http://opensearch-cluster-master:9200"
+config:
+  opensearch_dashboards.yml: |
+    server:
+      name: opensearch-dashboards
+      host: "{{ .Values.serverHost }}"
+lifecycle:
+  postStart:
+    exec:
+      command: ["/bin/sh", "-c", "/usr/share/opensearch-dashboards/bin/opensearch-dashboards-plugin remove securityDashboards"]

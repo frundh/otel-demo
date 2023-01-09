@@ -1,0 +1,74 @@
+observability:
+  jaeger:
+    enabled: false
+components:
+  frontendProxy:
+    resources:
+      limits:
+        memory: 300Mi
+opentelemetry-collector:
+  resources:
+    limits:
+      memory: 300Mi
+  config:
+    exporters:
+      otlp:
+        endpoint: 'tempo.tempo:4317'
+grafana:
+  grafana.ini:
+    paths:
+      data: /var/lib/grafana/
+      logs: /var/log/grafana
+      plugins: /var/lib/grafana/plugins
+      provisioning: /etc/grafana/provisioning
+    analytics:
+      check_for_updates: true
+    log:
+      mode: console
+    grafana_net:
+      url: https://grafana.net
+    server:
+      domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ .Values.ingress.hosts | first }}{{ else }}''{{ end }}"
+    feature_toggles:
+      enable: 'tempoApmTable'
+  plugins:
+    - grafana-opensearch-datasource
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          uid: webstore-metrics # grafana-dashboards.yaml uses this uid
+          type: prometheus
+          url: 'http://otel-demo-prometheus-server:9090'
+          editable: true
+          isDefault: true
+        - name: Tempo
+          uid: tempo
+          type: tempo
+          url: 'http://tempo.tempo:3100'
+          editable: true
+          isDefault: false
+          jsonData:
+            serviceMap:
+              datasourceUid: 'webstore-metrics'
+            nodeGraph:
+              enabled: true
+        - name: OpenSearch
+          uid: opensearch
+          type: grafana-opensearch-datasource
+          url: 'http://opensearch-cluster-master.opensearch:9200'
+          editable: true
+          isDefault: false
+          jsonData:
+            database: my_index
+            timeField: '@timestamp'
+            dataLinks:
+              - datasourceUid: tempo
+                field: trace_id
+                url: '$${__value.raw}'
+prometheus:
+  server:
+    extraFlags:
+      - web.enable-lifecycle
+      - web.enable-remote-write-receiver

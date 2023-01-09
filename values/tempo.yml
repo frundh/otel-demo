@@ -1,0 +1,5 @@
+tempo:
+  searchEnabled: true
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: "http://otel-demo-prometheus-server.otel-demo:9090/api/v1/write"

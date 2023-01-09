@@ -1,0 +1,72 @@
+version: 0.24.0
+
+repositories:
+  - name: open-telemetry
+    url: https://open-telemetry.github.io/opentelemetry-helm-charts
+
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+
+  - name: opensearch
+    url: https://opensearch-project.github.io/helm-charts
+
+  - name: fluent
+    url: https://fluent.github.io/helm-charts
+
+releases:
+  - name: otel-demo
+    chart: 
+      name: open-telemetry/opentelemetry-demo
+      version: 0.15.2
+    namespace: otel-demo
+    create_namespace: true
+    wait: true
+    values:
+      - src: values/otel-demo.yml
+        strict: true
+        render: false
+
+  - name: tempo
+    chart: 
+      name: grafana/tempo
+      version: 0.16.8
+    namespace: tempo
+    create_namespace: true
+    wait: true
+    values:
+      - src: values/tempo.yml
+        strict: true
+
+  - name: opensearch
+    chart: 
+      name: opensearch/opensearch
+      version: 2.9.0
+    namespace: opensearch
+    create_namespace: true
+    wait: true
+    values:
+      - src: values/opensearch.yml
+        strict: true
+
+  - name: opensearch-dashboards
+    chart: 
+      name: opensearch/opensearch-dashboards
+      version: 2.7.0
+    namespace: opensearch
+    create_namespace: true
+    wait: true
+    values:
+      - src: values/opensearch-dashboards.yml
+        strict: true
+        render: false
+
+  - name: fluent-bit
+    chart: 
+      name: fluent/fluent-bit
+      version: 0.21.7
+    namespace: fluent-bit
+    create_namespace: true
+    wait: true
+    values:
+      - src: values/fluent-bit.yml
+        strict: true
