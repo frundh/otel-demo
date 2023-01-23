@@ -11,10 +11,29 @@ opentelemetry-collector:
     limits:
       memory: 300Mi
   config:
+    processors:
+      batch:
     exporters:
       otlp:
-        endpoint: 'tempo.tempo:4317'
+        endpoint: https://otlp.eu01.nr-data.net:4317
+        headers:
+          api-key: [[ requiredEnv "NEWRELIC_LICENSE_KEY" | quote ]]
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
 grafana:
+  enabled: false
   grafana.ini:
     paths:
       data: /var/lib/grafana/
@@ -68,6 +87,7 @@ grafana:
                 field: trace_id
                 url: '$${__value.raw}'
 prometheus:
+  enabled: false
   server:
     extraFlags:
       - web.enable-lifecycle

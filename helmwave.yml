@@ -24,18 +24,19 @@ releases:
     values:
       - src: values/otel-demo.yml
         strict: true
-        render: false
+        delimiter_left: "[["
+        delimiter_right: "]]"
 
-  - name: tempo
-    chart: 
-      name: grafana/tempo
-      version: 0.16.8
-    namespace: tempo
-    create_namespace: true
-    wait: true
-    values:
-      - src: values/tempo.yml
-        strict: true
+  #- name: tempo
+  #  chart: 
+  #    name: grafana/tempo
+  #    version: 0.16.8
+  #  namespace: tempo
+  #  create_namespace: true
+  #  wait: true
+  #  values:
+  #    - src: values/tempo.yml
+  #      strict: true
 
   - name: opensearch
     chart: 
