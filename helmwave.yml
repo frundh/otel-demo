@@ -55,6 +55,8 @@ releases:
     namespace: opensearch
     create_namespace: true
     wait: true
+    depends_on:
+      - opensearch
     values:
       - src: values/opensearch-dashboards.yml
         strict: true
