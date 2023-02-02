@@ -29,7 +29,7 @@ releases:
   - name: tempo
     chart: 
       name: grafana/tempo
-      version: 0.16.8
+      version: 1.0.0
     namespace: tempo
     create_namespace: true
     wait: true
