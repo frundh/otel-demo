@@ -32,7 +32,7 @@ grafana:
     server:
       domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ .Values.ingress.hosts | first }}{{ else }}''{{ end }}"
     feature_toggles:
-      enable: 'tempoApmTable'
+      enable: 'tempoApmTable,traceqlEditor'
   plugins:
     - grafana-opensearch-datasource
   datasources:
